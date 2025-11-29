@@ -43,7 +43,11 @@ class TreeLight:
     def set_flicker(self, flicker: bool) -> None:
         self._enableFlicker = flicker
 
-        if self._enableFlicker and self.number != 24:  # Exclude star from flicker effect
+        if self.number != 24:  # Exclude star from flicker effect
+            self.set_brightness(100)
+            return
+
+        if self._enableFlicker:
             self._thread = Thread(target=self.__flicker)
             self._thread.start()
 
@@ -55,7 +59,7 @@ class TreeLight:
 
         while not self._event.is_set() or not self._enableFlicker:
             brightness = randint(1, self._brightness)
-            speed = randint(50, 100) / 100  # 0.5 - 1.0
+            speed = randint(20, 100) / 100  # 0.2 - 1.0
 
             if self._duty < brightness:  # Increasing fade
                 for pwm in range(self._duty, brightness + 1):
@@ -64,7 +68,7 @@ class TreeLight:
                     else:
                         self._pwm.ChangeDutyCycle(pwm)
                     self._duty = pwm
-                    sleep(0.01)
+                    sleep(0.007)
 
             elif self._duty > brightness:  # Decreasing fade
                 for pwm in reversed(range(brightness, self._duty + 1)):
@@ -73,6 +77,6 @@ class TreeLight:
                     else:
                         self._pwm.ChangeDutyCycle(pwm)
                     self._duty = pwm
-                    sleep(0.01)
+                    sleep(0.007)
 
             sleep(speed)
