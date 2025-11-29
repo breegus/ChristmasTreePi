@@ -4,13 +4,30 @@ from homeassistant import HomeAssistant
 import RPi.GPIO as GPIO
 import traceback
 from time import sleep
+from datetime import datetime
 
 def main() -> None:
     print("Main code start")
-    for led in TreeLights:
-        led.set_flicker(True)
+
+    prev_day = -1
+    now = datetime.now()  # Update date
+    if int(now.strftime('%m')) == 12:  # If december
+        day = 24 if int(now.strftime('%d')) > 24 else int(now.strftime('%d'))  # Cap day at 24
+        for led in range(0, day):
+            TreeLights[led].start_flicker()
+        prev_day = day
+
     while True:
-        sleep(1)
+        now = datetime.now()  # Update date
+
+        if int(now.strftime('%m')) == 12:  # If december
+            day = 24 if int(now.strftime('%d')) > 24 else int(now.strftime('%d'))  # Cap day at 24
+            if day != prev_day:
+                led = TreeLights[day]
+                led.set_flicker(True)
+                prev_day = day
+
+        sleep(60)
 
 if __name__ == '__main__':
     # Dates:    1, 2,  3,  4,  5,  6, 7, 8,  9, 10, 11, 12, 13, 14, 15,16, 17, 18, 19, 20, 21, 22, 23, 24, 25 (star)

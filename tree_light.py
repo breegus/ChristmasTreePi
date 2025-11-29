@@ -23,6 +23,9 @@ class TreeLight:
         self.set_enabled(False)  # Off by default
 
     def set_enabled(self, enabled: bool) -> None:
+        if self._isEnabled == enabled:
+            return
+
         self._isEnabled = enabled
 
         if self._isEnabled:
@@ -31,6 +34,9 @@ class TreeLight:
             self._pwm.stop()
 
     def set_brightness(self, brightness: int) -> None:
+        if self._brightness == brightness:
+            return
+
         self._brightness = brightness
         if self._brightness <= 0:
             self.set_enabled(False)
@@ -41,6 +47,9 @@ class TreeLight:
             self._duty = self._brightness
 
     def set_flicker(self, flicker: bool) -> None:
+        if self._enableFlicker == flicker:
+            return
+
         self._enableFlicker = flicker
 
         if self.number == 24:  # Exclude star from flicker effect
