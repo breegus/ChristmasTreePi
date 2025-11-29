@@ -43,7 +43,7 @@ class TreeLight:
     def set_flicker(self, flicker: bool) -> None:
         self._enableFlicker = flicker
 
-        if self.number != 24:  # Exclude star from flicker effect
+        if self.number == 24:  # Exclude star from flicker effect
             self.set_brightness(100)
             return
 
