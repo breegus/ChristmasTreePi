@@ -12,11 +12,12 @@ class TreeLight:
         GPIO.output(self.pin,GPIO.LOW)
 
         self._isEnabled = False  # LED On / Off
-        self._brightness = 100  # Duty (brightness 0-100)
+        self._brightness = 100  # Brightness (0-100)
         self._enableFlicker = False  # Flicker effect
 
-        self._pwm = GPIO.PWM(self.pin, self._brightness)
-        self._thread = Thread(target=self.__flicker)
+        self._pwm = GPIO.PWM(self.pin, self._brightness)  # PWM
+        self._duty = 100  # Active duty (0-100)
+        self._thread = Thread(target=self.__flicker)  # Threading
         self._event = Event()
 
         self.set_enabled(False)  # Off by default
@@ -37,6 +38,7 @@ class TreeLight:
             if not self._isEnabled:
                 self.set_enabled(True)
             self._pwm.ChangeDutyCycle(self._brightness)
+            self._duty = self._brightness
 
     def set_flicker(self, flicker: bool) -> None:
         self._enableFlicker = flicker
