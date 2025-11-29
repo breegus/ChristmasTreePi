@@ -15,7 +15,7 @@ class TreeLight:
 
         self._pwm = GPIO.PWM(self.pin, self._brightness)
 
-        self.set_enabled(True)  # Off by default
+        self.set_enabled(False)  # Off by default
 
     def set_enabled(self, enabled: bool) -> None:
         self._isEnabled = enabled
@@ -24,3 +24,12 @@ class TreeLight:
             self._pwm.start(self._brightness)
         else:
             self._pwm.stop()
+
+    def set_brightness(self, brightness: int) -> None:
+        self._brightness = brightness
+        if self._brightness <= 0:
+            self.set_enabled(False)
+        else:
+            if not self._isEnabled:
+                self.set_enabled(True)
+            self._pwm.ChangeDutyCycle(self._brightness)

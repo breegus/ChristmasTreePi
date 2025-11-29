@@ -7,6 +7,8 @@ from time import sleep
 
 def main() -> None:
     print("Main code start")
+    for led in TreeLights:
+        led.set_brightness(5)
     while True:
         sleep(1)
 
@@ -34,11 +36,12 @@ if __name__ == '__main__':
     except KeyboardInterrupt:  # Exit
         print("Exiting cleanly...")
         for light in TreeLights:  # Stop tree light effects cleanly
-            pass
-            #light.stop_flicker()
+            light.set_enabled(False)
         GPIO.cleanup()  # Reset GPIO
 
     except Exception as e:  # Unknown exception
         traceback.print_exception(e)  # Output error to console
+        for light in TreeLights:  # Attempt to stop tree light effects cleanly
+            light.set_enabled(False)
         GPIO.cleanup()  # Reset GPIO
         quit()  # Exit
