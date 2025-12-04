@@ -14,7 +14,7 @@ def main() -> None:
     if int(now.strftime('%m')) == 12:  # If december
         day = 24 if int(now.strftime('%d')) > 24 else int(now.strftime('%d'))  # Cap day at 24
         for led in range(0, day):
-            TreeLights[led].start_flicker()
+            TreeLights[led].set_flicker(True)
         prev_day = day
 
     while True:
